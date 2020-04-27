@@ -1,29 +1,10 @@
-const path = require('path');
-const os = require('os');
-const fs = require('fs');
-const http = require('http');
-const EventEmitter = require('events');
-const logger = require('./logger');
-// let pathObj = path.parse(__filename);
+const Logger = require('./logger');
 
-// console.log(
-//   fs.readdir(__dirname, 'utf8', (err, rs) => {
-//     console.log(err, rs);
-//   })
-// );
+const logger = new Logger();
 
-// console.log(pathObj);
-// console.log(os.freemem());
-// console.log(os.totalmem());
+// now we are adding a listener and emitting an event on the same emitter instance which is encapsulated inside Logger class
+logger.on('messageLogged', (uid) => {
+  console.log('Message Logged', uid);
+});
 
-// console.log(http)
-
-const emitter = new EventEmitter();
-
-// emitter.on('messageLogged', (event) =>
-//   console.log('listened to the event', event)
-// );
-
-// emitter.emit('messageLogged', { id: 1, name: 'Database Error' });
-
-logger.log();
+logger.log('message');
