@@ -31,3 +31,16 @@ logger.on('messageLogged', (uid) => console.log(uid))
 
 logger.log()
 ```
+
+##### Using Http to create a server and listen to it
+
+```javascript
+const http = require('http');
+
+const server = http.createServer();
+
+server.on('connection', () => console.log('server up and running'));
+
+server.listen(4000);
+console.log(`Listening on port 4000`);
+```
