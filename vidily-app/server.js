@@ -1,4 +1,6 @@
 require('dotenv-flow').config();
+const startupDebugger = require('debug')('app:startup');
+const dbDebugger = require('debug')('app:db');
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -46,11 +48,11 @@ app.post('/api/genres', (req, res) => {
     name: req.body.name,
     genre: req.body.genre,
   };
-  console.log(typeof req.body);
   if (typeof req.body !== 'object') {
     res.status(400).send('Data malformed');
     return;
   }
+  dbDebugger('Adding data to database');
   genres = [...genres, genre];
   res.send('Data Posted Successfully!');
 });
@@ -82,4 +84,7 @@ app.delete('/api/courses/:id', (req, res) => {
   res.send(genres[id]);
 });
 
-app.listen(PORT, () => console.log(`Sever running at PORT 8000`));
+app.listen(PORT, () => {
+  startupDebugger('Starting the server');
+  console.log(`Sever running at PORT 8000`);
+});
