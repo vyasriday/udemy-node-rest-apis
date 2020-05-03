@@ -1,9 +1,11 @@
+require('dotenv-flow').config();
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const logger = require('./middlewares/logger');
 const authentication = require('./middlewares/authentication');
 
+const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -80,4 +82,4 @@ app.delete('/api/courses/:id', (req, res) => {
   res.send(genres[id]);
 });
 
-app.listen(8000, () => console.log(`Sever running at PORT 8000`));
+app.listen(PORT, () => console.log(`Sever running at PORT 8000`));
