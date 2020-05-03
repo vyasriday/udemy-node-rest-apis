@@ -4,7 +4,7 @@ const Joi = require('@hapi/joi');
 const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 4000;
-const courses = [
+let courses = [
   {
     id: 1,
     name: 'Node Complete Course',
@@ -56,11 +56,13 @@ app.post('/api/courses', (req, res) => {
     name: req.body.name,
     price: req.body.price,
   };
+  courses = [...courses, course];
   res.status(200).send(course);
 });
 
 app.put('/api/courses/:id', (req, res) => {
-  const id = parseInt(req.id);
+  const id = parseInt(req.params.id);
+  const body = req.body;
   const course = courses.find((course) => course.id === id);
   if (!course) {
     res.status(400).send('Course does not exist!');
@@ -68,11 +70,22 @@ app.put('/api/courses/:id', (req, res) => {
   }
   courses = courses.map((course) => {
     if (course.id === id) {
-      return { ...course };
+      return { ...body };
     }
     return course;
   });
-  return courses;
+  res.send(course);
+});
+
+app.delete('/api/courses/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const course = courses.find((course) => course.id === id);
+  if (!course) {
+    res.status(400).send('Course does not exist!');
+    return;
+  }
+  courses = courses.filter((course) => course.id !== id);
+  res.send(course);
 });
 
 app.listen(PORT, () => console.log(`Listening on Port ${PORT}`));
