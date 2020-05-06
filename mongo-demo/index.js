@@ -29,11 +29,28 @@ async function createCourse() {
 }
 
 async function getCourse(id) {
-  const course = await Course.findById('5eb28b8b69d96255d8f7dd64');
+  // const course = await Course.findById('5eb28b8b69d96255d8f7dd64');
   // let's say we want to find courses where price is greater than 10
-  const courses = await Course.find().limit(2).sort({ name: 1 }).count();
+  const courses = await Course.find();
   // console.log(course);
   console.log(courses);
 }
 // createCourse();
 getCourse();
+
+async function updateCourse(id) {
+  // const course = await Course.findById(id);
+  // if (!course) return;
+
+  // course.set({
+  //   author: 'Hridayesh',
+  //   name: 'Express Course',
+  // });
+  // const res = await course.save();
+  // console.log(res);
+  const course = await Course.findByIdAndUpdate(id, {
+    name: 'Hridayesh Shara',
+  });
+}
+
+// updateCourse('5eb2ed3337b6f25b585349f8');
