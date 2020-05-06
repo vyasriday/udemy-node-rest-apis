@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 mongoose
-  .connect('mongodb://localhost/node-playground')
+  .connect('mongodb://localhost/node-playground', {
+    useNewUrlParser: true,
+  })
   .then((res) => console.log('Connection Established'))
   .catch(console.log);
 
@@ -16,9 +18,9 @@ const Course = mongoose.model('Course', courseSchema);
 
 async function createCourse() {
   const course = new Course({
-    name: 'React Master Class',
+    name: 'Golang Master Class',
     author: 'John Doe',
-    tags: ['node', 'javascript'],
+    tags: ['go'],
     isPublished: false,
   });
 
@@ -28,8 +30,9 @@ async function createCourse() {
 
 async function getCourse(id) {
   const course = await Course.findById('5eb28b8b69d96255d8f7dd64');
-  const courses = await Course.find();
-  console.log(course);
+  // let's say we want to find courses where price is greater than 10
+  const courses = await Course.find().limit(2).sort({ name: 1 }).count();
+  // console.log(course);
   console.log(courses);
 }
 // createCourse();
