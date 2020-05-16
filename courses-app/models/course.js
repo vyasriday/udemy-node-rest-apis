@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 
+// const authorSchema = mongoose.Schema({
+//   name: String,
+// });
+
 const Schema = mongoose.Schema({
   name: {
     type: String,
@@ -12,6 +16,7 @@ const Schema = mongoose.Schema({
     ref: 'author',
     // name of collection in singular
   },
+  // author: authorSchema,
   tags: {
     type: [String],
     validate: {
