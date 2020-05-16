@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const Course = require('../schemas/course');
+const Course = require('../models/course');
 
 router.get('/', async (req, res) => {
-  const courses = await Course.find();
+  const courses = await Course.find().populate('author', 'name');
   res.status(200).send(courses);
 });
 
 router.get('/:id', async (req, res) => {
   // req.params stores route params as string.
-  const id = parseInt(req.params.id);
+  const id = req.params.id;
   try {
     const course = await Course.findById(id);
     res.status(200).send(course);

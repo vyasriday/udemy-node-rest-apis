@@ -4,6 +4,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const homeRoute = require('./routes/home');
 const coursesRoutes = require('./routes/courses');
+const authorRoutes = require('./routes/authors');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 // routes middleware
 app.use('/api/courses', coursesRoutes);
+app.use('/api/authors', authorRoutes);
 app.use('/', homeRoute);
 // set views
 app.set('view engine', 'pug');

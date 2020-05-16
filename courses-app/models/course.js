@@ -7,7 +7,11 @@ const Schema = mongoose.Schema({
     minlength: 6,
     trim: true,
   },
-  author: String,
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'author',
+    // name of collection in singular
+  },
   tags: {
     type: [String],
     validate: {
