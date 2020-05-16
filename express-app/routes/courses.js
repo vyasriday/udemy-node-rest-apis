@@ -20,12 +20,19 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', (req, res) => {
   const course = new Course(req.body);
-  course
-    .validate()
-    .then((_) => {
-      course.save().then((course) => res.status(200).send(course));
-    })
-    .catch((err) => res.status(400).send(err.message));
+  course.validate((err) => {
+    if (!err) {
+      course
+        .save()
+        .then((course) => res.status(200).send(course))
+        .catch((err) => {
+          res.status(400).send(err.message);
+        });
+    } else {
+      console.log(err);
+      res.status(400).send(err.message);
+    }
+  });
 });
 
 router.put('/:id', (req, res) => {

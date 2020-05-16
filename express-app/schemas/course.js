@@ -4,13 +4,31 @@ const Schema = mongoose.Schema({
   name: {
     type: String,
     required: true,
+    minlength: 6,
+    trim: true,
   },
   author: String,
-  tags: [String],
+  tags: {
+    type: [String],
+    validate: {
+      validator: function (v) {
+        return v.length > 0;
+      },
+      message: 'A course should have atleast one tag',
+    },
+  },
   isPublished: Boolean,
   publishedAt: {
     type: Date,
     default: Date.now,
+  },
+  price: {
+    type: Number,
+    required: function () {
+      return this.isPublished;
+    },
+    get: (v) => Math.round(v),
+    set: (v) => Math.round(v),
   },
 });
 
