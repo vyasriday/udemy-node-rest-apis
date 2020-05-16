@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const GenreSchema = require('../schemas/genre');
-// set database
-const Genre = mongoose.model('genre', GenreSchema);
+const Genre = require('../models/genre');
 
 router.get('', (req, res) => {
   Genre.find()

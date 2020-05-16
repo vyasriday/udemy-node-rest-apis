@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const morgan = require('morgan');
 const path = require('path');
 const genreRoutes = require('./routes/genres');
-// const customerRoutes = require('./routes/customers');
+const customerRoutes = require('./routes/customers');
 const homeRoute = require('./routes/home');
 const PORT = process.env.PORT || 8000;
 
@@ -29,7 +29,7 @@ app.use(morgan('combined'));
 
 // tell express to use our routes
 app.use('/api/genres', genreRoutes);
-// app.use('/api/customers', customerRoutes);
+app.use('/api/customers', customerRoutes);
 app.use('/', homeRoute);
 // this should go in last as all routes match /
 // set template engine
