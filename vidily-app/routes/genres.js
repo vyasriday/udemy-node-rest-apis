@@ -1,63 +1,50 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+const GenreSchema = require('../schemas/genre');
 // set database
-let genres = [];
+const Genre = mongoose.model('genre', GenreSchema);
 
 router.get('', (req, res) => {
-  console.log(req.custom);
-  res.send(genres);
+  Genre.find()
+    .then((genres) => res.status(200).send(genres))
+    .catch((err) => res.status(400).send(err));
 });
 
 // these routes are prefixed by /api/genres
 router.get('/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const item = genres.find((genre) => genre.id === id);
-  if (!item) {
-    res.status(404).send('Genre not found!!!');
-    return;
-  }
-  res.status(200).send(item);
+  const id = req.params.id;
+  Genre.findById(id)
+    .then((genre) => res.status(200).send(genre))
+    .catch((err) => res.status(400).send('Document not found!'));
 });
 
 router.post('', (req, res) => {
-  const genre = {
-    id: genres.length + 1,
-    name: req.body.name,
-    genre: req.body.genre,
-  };
-  if (typeof req.body !== 'object') {
-    res.status(400).send('Data malformed');
-    return;
-  }
-  genres = [...genres, genre];
-  res.send('Data Posted Successfully!');
+  const genre = new Genre(req.body);
+  genre.validate((err) => {
+    if (err) {
+      res.status(400).send(err.message);
+      return;
+    }
+    genre
+      .save()
+      .then((r) => res.status(200).send({ IsPosted: true }))
+      .catch((err) => res.status(400).send('Error Occured'));
+  });
 });
 
 router.put('/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const item = genres.find((genre) => genre.id === id);
-  if (!item) {
-    res.status(404).send('Genre not found!!!');
-    return;
-  }
-  genres = genres.map((genre) => {
-    if (genre.id === id) {
-      return { ...item };
-    }
-    return genre;
-  });
-  res.send(genres[id]);
+  const id = req.params.id;
+  Genre.findByIdAndUpdate(id, req.body)
+    .then((genre) => res.status(200).send(genre))
+    .catch((genre) => res.status(400).send('Invalid Document Id'));
 });
 
 router.delete('/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  const item = genres.find((genre) => genre.id === id);
-  if (!item) {
-    res.status(404).send('Genre not found!!!');
-    return;
-  }
-  genres = genres.filter((genre) => genre.id !== id);
-  res.send(genres[id]);
+  const id = req.params.id;
+  Genre.findByIdAndDelete(id)
+    .then((genre) => res.status(200).send(genre))
+    .catch((err) => res.status(400).send('Invalid Document'));
 });
 
 module.exports = router;
